@@ -1,0 +1,125 @@
+.search {
+  max-width: 1280px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 70px 70px 48px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+  .search {
+    padding: 86px 30px 62px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .search {
+    padding: 92px 14px 50px;
+  }
+}
+
+.search-form {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e8e8e8;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 520px) {
+  .search-form {
+    padding-bottom: 9px;
+    margin-bottom: 42px;
+  }
+}
+
+.search-form__label {
+  min-width: 34px;
+  height: 34px;
+  background-image: url(../../images/icon_find.svg);
+  margin-left: 6px;
+  background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 520px) {
+  .search-form__label {
+    display: none;
+  }
+}
+
+.search-form__input {
+  width: 100%;
+  border: none;
+  padding: 0;
+  margin: 0 0 0 10px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 34px;
+}
+
+
+@media screen and (max-width: 520px) {
+  .search-form__input {
+    font-size: 18px;
+    line-height: 22px;
+    margin: 0;
+  }
+}
+
+.search-form__input:focus {
+  outline: none;
+}
+
+.search-form__input::placeholder {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 34px;
+  color: #a0a0a0;
+  text-align: center;
+  padding-left: 46px;
+}
+
+@media screen and (max-width: 520px) {
+  .search-form__input::placeholder {
+    padding: 0;
+    text-align: start;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+.search-form__error {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+  margin: 6px 0 0;
+  min-height: 18px;
+  position: absolute;
+  top: 45px;
+  left: 65px;
+}
+
+.search-form__button {
+  min-width: 80px;
+  height: 34px;
+  border: none;
+  padding: 0;
+  box-sizing: border-box;
+  background: url(../../images/button_find.svg);
+  background-position: center;
+  transition: opacity 0.2s linear;
+}
+
+.search-form__button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}

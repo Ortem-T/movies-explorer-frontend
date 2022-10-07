@@ -1,0 +1,130 @@
+.header {
+  background-color: #073042;
+}
+
+.header__login {
+  background-color: #fff;
+}
+
+.header__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 70px;
+  box-sizing: border-box;
+  background-color: #073042;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__container-login {
+  background-color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+  .header__container {
+    padding: 17px 30px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .header__container {
+    padding: 17px 14px;
+  }
+}
+
+.header__logo {
+  min-width: 38px;
+  height: 38px;
+  background-image: url(../../images/logo.svg);
+  transition: opacity 0.2s linear;
+}
+
+.header__logo:hover {
+  opacity: 0.8;
+}
+
+.header__menu {
+  list-style-type: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+@media screen and (max-width: 520px) {
+  .header__menu {
+    gap: 14px;
+  }
+}
+
+.header__register-link {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s linear;
+}
+
+@media screen and (max-width: 520px) {
+  .header__register-link {
+    font-size: 10px;
+  }
+}
+
+.header__register-link:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.header__auth-link {
+  width: 76px;
+  height: 32px;
+  background: #2be080;
+  border-radius: 3px;
+  padding: 8px 20px;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #000;
+  text-decoration: none;
+  transition: opacity 0.2s linear;
+}
+
+@media screen and (max-width: 520px) {
+  .header__auth-link {
+    width: 54px;
+    height: 26px;
+    font-size: 10px;
+    padding: 5px 12px;
+  }
+}
+
+.header__auth-link:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.header__burger-menu {
+  display: none;
+  transition: opacity 0.2s linear;
+  
+}
+
+@media screen and (max-width: 768px) {
+  .header__burger-menu {
+    display: block;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.header__burger-menu:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}

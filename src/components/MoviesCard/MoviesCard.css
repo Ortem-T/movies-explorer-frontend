@@ -1,0 +1,117 @@
+.movie {
+  max-width: 270px;
+  width: 100%;
+  min-height: 218px;
+  background: #fdfdfd;
+  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .movie {
+    max-width: 339px;
+    min-height: 257px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .movie {
+    min-height: 235px;
+  }
+}
+
+.movie__item {
+  margin: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie__image {
+  max-width: 270px;
+  width: 100%;
+  min-height: 151px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  object-fit: cover;
+  object-position: top;
+  margin-bottom: 14px;
+}
+
+@media screen and (max-width: 1024px) {
+  .movie__image {
+    max-width: 339px;
+    min-height: 190px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .movie__image {
+    min-height: 168px;
+  }
+}
+
+.movie__title {
+  max-width: 206px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+  margin-left: 12px;
+}
+
+
+.movie__duration {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  color: #a0a0a0;
+  margin: 0;
+  margin-left: 12px;
+  margin-bottom: 14px;
+}
+
+.movie__checkbox {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 12px;
+  bottom: 53px;
+}
+
+.movie__checkbox-input {
+  appearance: none;
+  outline: none;
+  position: relative;
+}
+
+.movie__checkbox-input:hover {
+  cursor: pointer;
+}
+
+.movie__checkbox-input::before {
+  content: '';
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 0;
+  left: 0;
+  border: 3px solid #fff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  background-color: #f9f9f9;
+  transition: 0.2s linear;
+}
+
+.movie__checkbox-input:checked::before {
+  background-color: #2be080;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}

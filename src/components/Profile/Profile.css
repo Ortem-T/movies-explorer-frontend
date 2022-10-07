@@ -1,0 +1,144 @@
+.profile {
+  margin: 0;
+  padding: 74px 0 70px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .profile {
+    padding: 236px 0 269px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .profile {
+    padding: 70px 0 40px;
+  }
+}
+
+.profile__title {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: #000;
+  margin: 0 0 123px;
+}
+
+@media screen and (max-width: 1024px) {
+  .profile__title {
+    margin: 0 0 96px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .profile__title {
+    margin: 0 0 80px;
+  }
+}
+
+.profile__fildset {
+  width: 410px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 520px) {
+  .profile__fildset {
+    width: 260px;
+  }
+}
+
+.profile__fildset:first-of-type {
+  border-bottom: 1px solid #e8e8e8;
+  padding: 0 0 16px;
+  margin: 0 0 17px;
+}
+
+.profile__label {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 13px;
+  color: #000;
+  margin: 0;
+}
+
+.profile__input {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: right;
+  color: #000;
+  padding: 0;
+  border: none;
+}
+
+.profile__input:focus {
+  outline: none;
+}
+
+.profile__edit-button {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #000;
+  margin: 220px 0 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  transition: opacity 0.2s linear;
+}
+
+@media screen and (max-width: 1024px) {
+  .profile__edit-button {
+    margin: 210px 0 0;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .profile__edit-button {
+    font-size: 12px;
+    line-height: 15px;
+    margin: 379px 0 0;
+  }
+}
+
+.profile__edit-button:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.profile__logout-link {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #ff3055;
+  text-decoration: none;
+  margin: 16px 0 0;
+  transition: opacity 0.2s linear;
+}
+
+@media screen and (max-width: 520px) {
+  .profile__logout-link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
+
+.profile__logout-link:hover {
+  opacity: 0.7;
+}
