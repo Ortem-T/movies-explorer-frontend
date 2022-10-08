@@ -85,6 +85,7 @@
 
 .profile__input:focus {
   outline: none;
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .profile__edit-button {

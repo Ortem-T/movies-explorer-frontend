@@ -15,6 +15,7 @@ function SearchForm() {
           id='search'
           placeholder='Фильм'
           aria-label='Введите название фильма'
+          required
         />
         <span className='search-form__error'></span>
         <button className='search-form__button' type='submit' aria-label='Найти фильм' />

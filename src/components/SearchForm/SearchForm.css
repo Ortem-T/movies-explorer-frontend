@@ -74,6 +74,8 @@
 
 .search-form__input:focus {
   outline: none;
+  border-radius: 8px;
+  background-image: linear-gradient(90deg, #f9f9f9 70%, #3456f3);
 }
 
 .search-form__input::placeholder {

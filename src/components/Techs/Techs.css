@@ -118,7 +118,7 @@
   align-self: center;
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 10px;
 }
 
