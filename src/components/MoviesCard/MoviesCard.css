@@ -33,7 +33,7 @@
 .movie__image {
   max-width: 270px;
   width: 100%;
-  min-height: 151px;
+  height: 151px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   object-fit: cover;
@@ -44,14 +44,19 @@
 @media screen and (max-width: 1024px) {
   .movie__image {
     max-width: 339px;
-    min-height: 190px;
+    height: 190px;
   }
 }
 
 @media screen and (max-width: 520px) {
   .movie__image {
-    min-height: 168px;
+    height: 168px;
   }
+}
+
+.movie__link {
+  display: flex;
+  justify-content: center;
 }
 
 .movie__title {
@@ -79,39 +84,57 @@
   margin-bottom: 14px;
 }
 
-.movie__checkbox {
+.movie__like {
+  position: absolute;
   width: 16px;
   height: 16px;
-  position: absolute;
   right: 12px;
-  bottom: 53px;
-}
-
-.movie__checkbox-input {
-  appearance: none;
-  outline: none;
-  position: relative;
-}
-
-.movie__checkbox-input:hover {
-  cursor: pointer;
-}
-
-.movie__checkbox-input::before {
-  content: '';
-  position: absolute;
-  width: 13px;
-  height: 13px;
-  top: 0;
-  left: 0;
+  bottom: 37px;
   border: 3px solid #fff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   border-radius: 50%;
   background-color: #f9f9f9;
   transition: 0.2s linear;
+  padding: 0;
 }
 
-.movie__checkbox-input:checked::before {
+.movie__like:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.movie__like_active {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  right: 12px;
+  bottom: 37px;
+  border: 3px solid #fff;
+  border-radius: 50%;
   background-color: #2be080;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  transition: 0.2s linear;
+  padding: 0;
+}
+
+.movie__like_active:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.movie__delete {
+  width: 16px;
+  height: 16px;
+  border: none;
+  background-image: url(../../images/delete_movie.svg);
+  background-color: transparent;
+  position: absolute;
+  right: 12px;
+  bottom: 37px;
+  transition: opacity 0.2s linear;
+}
+
+.movie__delete:hover {
+  opacity: 0.7;
+  cursor: pointer;
 }

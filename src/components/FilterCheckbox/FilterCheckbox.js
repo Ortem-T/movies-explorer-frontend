@@ -1,7 +1,7 @@
 import React from 'react';
 import './FilterCheckbox.css';
 
-function FilterCheckbox() {
+function FilterCheckbox({ checked, handleToogleCheck }) {
   return (
     <form className='checkbox'>
       <input
@@ -10,6 +10,8 @@ function FilterCheckbox() {
         id='checkbox'
         name='checkbox'
         aria-label='Найти короткометражки'
+        checked={checked}
+        onChange={handleToogleCheck}
       />
       <label className='checkbox__label' htmlFor='checkbox'>
         Короткометражки
