@@ -4,69 +4,73 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../../components/Preloader/Preloader';
 
-function Movies({ allMovies }) {
-  const [submitted, setSubmitted] = useState(false);
+import * as moviesApi from '../../utils/MoviesApi';
+
+function Movies({ handleSaveMovie, userMovies, handleDeleteMovie }) {
+  const [movies, setMovies] = useState([]);
+  const [initialMovies, setInitialMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [checked, setChecked] = useState(false);
   const [shortMovies, setShortMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [limitMovies, setLimitMovies] = useState(null);
+  const [rowMovies, setRowMovies] = useState(null);
   const [shownMovies, setShownMovies] = useState([]);
   const [screenWidth, setScreenWidth] = useState(window.screen.width);
 
   useEffect(() => {
-    if (submitted) {
+    moviesApi
+      .getMovies()
+      .then((data) => {
+        setMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : data);
+        setInitialMovies(data);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+  }, []);
 
-      const results = allMovies.filter(movie =>
-        movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setSearchResults(results);
-      setIsLoading(true);
-      initScreen(screenWidth);
-      localStorage.removeItem('searchValue')
-      localStorage.removeItem('resultsSearch')
-      localStorage.setItem('searchValue', JSON.stringify(searchTerm))
-      localStorage.setItem('resultsSearch', JSON.stringify(results))
-    }
-    setTimeout(() => setIsLoading(false), 1000);
-  }, [submitted, searchTerm, allMovies, checked, screenWidth]);
+  // useEffect(() => {
+  //   setMovies(JSON.parse(localStorage.getItem('resultsSearch')));
+  //   setChecked(JSON.parse(localStorage.getItem('isShort')));
+  // }, [])
 
-  useEffect(() => {
-    setSearchResults(JSON.parse(localStorage.getItem('resultsSearch')));
-    setChecked(JSON.parse(localStorage.getItem('isShort')));
-  }, [])
+  const handleSearch = (searchValue) => {
+    const filteredMovies = initialMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
+    setMovies(filteredMovies)
+    localStorage.setItem('searchValue', JSON.stringify(searchValue))
+    localStorage.setItem('resultsSearch', JSON.stringify(filteredMovies))
+    setIsLoading(false)
+  }
 
-  useEffect(() => {
-    if (checked) {
-      const shortMovies = searchResults.filter(movie =>
-        movie.duration <= 40
-      );
-      setShortMovies(shortMovies.slice(0, limitMovies));
-      localStorage.setItem('isShort', JSON.stringify(checked))
-    }
-  }, [checked, searchResults, setShortMovies, screenWidth, limitMovies]);
-
-  useEffect(() => {
-    setShownMovies(searchResults.slice(0, limitMovies));
-  }, [limitMovies, searchResults, screenWidth]);
-
-  useEffect(() => {
-    initScreen(screenWidth);
-  }, [screenWidth]);
+  const handleShortMovies = () => {
+    const filteredShortMovies = movies.filter((movie) => movie.duration <= 40);
+    setShortMovies(filteredShortMovies)
+  }
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    initScreen(screenWidth);
+  }, [screenWidth]);
+
+  useEffect(() => {
+    setShownMovies(movies.slice(0, limitMovies));
+  }, [movies, limitMovies]);
+
   const initScreen = (width) => {
     if (width > 1024) {
       setLimitMovies(16);
+      setRowMovies(4)
     } else if (width < 1024 && width >= 768) {
       setLimitMovies(8);
+      setRowMovies(2)
     } else if (width < 768) {
       setLimitMovies(5);
+      setRowMovies(1)
     }
   };
 
@@ -80,16 +84,18 @@ function Movies({ allMovies }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setSubmitted(true);
+    setIsLoading(true)
+    handleSearch(searchTerm)
   }
 
   function handleToogleCheck() {
+    handleShortMovies()
     setChecked(!checked);
     localStorage.setItem('isShort', JSON.stringify(!checked))
   }
 
   function handleMoreMovies() {
-    setLimitMovies(limitMovies + 4);
+    setLimitMovies(limitMovies + rowMovies);
   }
 
   return (
@@ -108,11 +114,16 @@ function Movies({ allMovies }) {
       ) : (
         <MoviesCardList
           handleMoreMovies={handleMoreMovies}
+          // handleSaveMovie={handleSaveMovie}
+          // handleDeleteMovie={handleDeleteMovie}
+          // movies={movies}
+          allMovies={movies}
           movies={checked ? shortMovies : shownMovies}
-          searchResults={searchResults}
-          shortMovies={shortMovies}
+          // searchResults={searchResults}
+          // shortMovies={shortMovies}
           limitMovies={limitMovies}
-          checked={checked}
+        // checked={checked}
+        // savedMovies={userMovies}
         />
       )}
     </main>

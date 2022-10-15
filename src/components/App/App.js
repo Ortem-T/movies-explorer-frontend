@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, } from 'react';
 import {
   Routes,
   Route,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import './App.css';
 import Header from '../Header/Header';
@@ -15,7 +16,7 @@ import Register from '../Register/Register'
 import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
 
-import * as moviesApi from '../../utils/MoviesApi';
+// import * as moviesApi from '../../utils/MoviesApi';
 import * as api from '../../utils/MainApi';
 
 function App() {
@@ -24,44 +25,106 @@ function App() {
   const pathWithFooter = ['/', '/movies', '/saved-movies'];
 
   // const [loggedIn, setLoggedIn] = useState(false);
-  const [allMovies, setAllMovies] = useState([]);
+  // const [allMovies, setAllMovies] = useState([]);
 
-  useEffect(() => {
-    moviesApi
-      .getMovies()
-      .then((data) => {
-        setAllMovies(data);
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-        // setIsInfoTooltipOpen(true);
-        // if (err.includes(401)) {
-        //   setMessage(AUTH_ERROR);
-        //   setLoggedIn(false);
-        //   localStorage.clear();
-        // } else {
-        //   setMessage(REQUEST_ERROR);
-        // }
-      });
-  }, [setAllMovies]);
+  const navigate = useNavigate();
 
-  function handleSaveMovie(movie) {
+  // useEffect(() => {
+  //     api
+  //       .getSavedMovies()
+  //       .then((data) => {
+  //         setUserMovies(data);
+  //       })
+  //       .catch((err) => {
+  //         console.log(`Ошибка: ${err}`);
+  //         if (err.includes(401)) {
+  //           setIsInfoTooltipOpen(true);
+  //           setMessage(AUTH_ERROR);
+  //           setLoggedIn(false);
+  //           localStorage.clear();
+  //         } else {
+  //           handleError();
+  //         }
+  //       });
+  //   }
+  // , [setUserMovies]);
+
+  // function handleSaveMovie(movie) {
+  //   console.log(movie)
+  //   api
+  //     .addMovie(movie)
+  //     .then((newMovie) => {
+  //       console.log(newMovie)
+  //       setUserMovies([newMovie.data, ...userMovies.data]);
+  //     })
+  //     .catch((err) => {
+  //       console.log(`Ошибка: ${err}`);
+  //       if (err.includes(401)) {
+  //         setIsInfoTooltipOpen(true);
+  //         setMessage(AUTH_ERROR);
+  //         setLoggedIn(false);
+  //         localStorage.clear();
+  //       } else {
+  //         handleError();
+  //       }
+  //     });
+  // }
+
+  // function handleDeleteMovie(movie) {
+  //   const movieId = movie._id;
+  //   api
+  //     .deleteSavedMovie(movieId)
+  //     .then(() => {
+  //       const newUserMovies = userMovies.data.filter((i) => i._id !== movieId && i);
+  //       setUserMovies(newUserMovies);
+  //     })
+  //     .catch((err) => {
+  //       console.log(`Ошибка: ${err}`);
+  //       if (err.includes(401)) {
+  //         setIsInfoTooltipOpen(true);
+  //         setMessage(AUTH_ERROR);
+  //         setLoggedIn(false);
+  //         localStorage.clear();
+  //       } else {
+  //         handleError();
+  //       }
+  //     });
+  // }
+
+  function handleRegister(name, email, password) {
     api
-      .addMovie(movie)
-      .then((newMovie) => {
-        // setUserMovies([newMovie, ...userMovies]);
+      .register(name, email, password)
+      .then(() => {
+        // handleLogin({ email, password });
+        navigate('/signin');
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-        // if (err.includes(401)) {
-        //   setIsInfoTooltipOpen(true);
-        //   setMessage(AUTH_ERROR);
-        //   setLoggedIn(false);
-        //   localStorage.clear();
+        console.log(`Ошибка регистрации. ${err}`);
+        // setIsInfoTooltipOpen(true);
+        // if (err.includes(409)) {
+        //   setMessage(CONFLICT_ERR_MESSAGE);
+        // } else if (err.includes(400)) {
+        //   setMessage(BAD_REQ_ERR_MESSAGE);
         // } else {
-        //   handleError();
+        //   setMessage(SERVER_ERROR);
         // }
       });
+  }
+
+  function handleLogin(email, password) {
+    api.authorize(email, password)
+      .then((res) => {
+        if (res) {
+          // setLoggedIn(true)
+          // setUserEmail(email)
+          navigate('/movies');
+        }
+      })
+      .catch((err) => {
+        // setMessage(false);
+        // setIsInfoTooltipOpen(true);
+        console.log(`Невозможно войти. ${err}`);
+      })
   }
 
   return (
@@ -76,12 +139,16 @@ function App() {
 
         <Route path="/movies"
           element={(<Movies
-            allMovies={allMovies}
+            // allMovies={allMovies}
+            // handleSaveMovie={handleSaveMovie}
+            // handleDeleteMovie={handleDeleteMovie}
           />)}
         />
 
         <Route path="/saved-movies"
           element={(<SavedMovies
+            // userMovies={userMovies}
+            // handleDeleteMovie={handleDeleteMovie}
           />)}
         />
 
@@ -91,11 +158,15 @@ function App() {
         />
 
         <Route path="/signin"
-          element={(<Login />)}
+          element={(<Login 
+            onLogin={handleLogin}
+          />)}
         />
 
         <Route path="/signup"
-          element={(<Register />)}
+          element={(<Register
+            onRegister={handleRegister}
+          />)}
         />
 
         <Route path='*'

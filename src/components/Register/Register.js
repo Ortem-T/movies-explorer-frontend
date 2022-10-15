@@ -1,14 +1,37 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Register.css';
 
-function Register() {
+function Register({ onRegister }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+    console.log(email)
+  }
+
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onRegister(name, email, password);
+  }
+
   return (
-    <form className='register' noValidate>
+    <form className='register' noValidate onSubmit={handleSubmit}>
       <Link to='/' className='register__logo' />
       <h2 className='register__title'>Добро пожаловать!</h2>
       <label className='register__label'>Имя</label>
       <input
+        onChange={handleNameChange}
         className='register__input'
         placeholder='Введите имя'
         name='name'
@@ -21,6 +44,7 @@ function Register() {
       <span className='register__input-error'></span>
       <label className='register__label'>E-mail</label>
       <input
+        onChange={handleEmailChange}
         className='register__input'
         placeholder='Введите e-mail'
         name='email'
@@ -31,6 +55,7 @@ function Register() {
       <span className='register__input-error'></span>
       <label className='register__label'>Пароль</label>
       <input
+        onChange={handlePasswordChange}
         className='register__input'
         placeholder='Введите пароль'
         name='password'

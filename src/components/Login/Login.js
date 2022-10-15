@@ -1,14 +1,31 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
 
-function Login() {
+function Login({ onLogin }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  function handleEmailChange(evt) {
+    setEmail(evt.target.value);
+  }
+
+  function handlePasswordChange(evt) {
+    setPassword(evt.target.value);
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    onLogin(email, password);
+  }
+
   return (
-    <form className='login' noValidate>
+    <form className='login' onSubmit={handleSubmit} noValidate>
       <Link to='/' className='login__logo' />
       <h2 className='login__title'>Рады видеть!</h2>
       <label className='login__label'>E-mail</label>
       <input
+        onChange={handleEmailChange}
         className='login__input'
         placeholder='Введите e-mail'
         name='email'
@@ -19,6 +36,7 @@ function Login() {
       <span className='login__input-error'></span>
       <label className='login__label'>Пароль</label>
       <input
+        onChange={handlePasswordChange}
         className='login__input'
         placeholder='Введите пароль'
         name='password'

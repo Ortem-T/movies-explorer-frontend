@@ -1,14 +1,31 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
 
 import { API_URL, getTimeFromMins } from '../../utils/const';
+import * as api from '../../utils/MainApi';
 
-function MoviesCard({ movie }) {
-  const imgUrl = `${API_URL}${movie.image.url}`;
+function MoviesCard({ movie, allMovies, handleDeleteMovie }) {
+  const [addMovies, setAddMovies] = useState([]);
   const location = useLocation();
-  // const savedMovie = savedMovies.find((i) => i.movieId === movie.id);
+  const imgUrl = location.pathname === "/movies" ? `${API_URL}${movie.image.url}` : `${movie.image}`;
+  const savedMovie = allMovies.find((i) => i.movieId === movie.id);
+  console.log(allMovies)
+  console.log(savedMovie)
   // const likeButtonClassName = `movie__like ${savedMovie && 'movie__like_active'}`;
+
+  function handleSaveMovie(movie) {
+    console.log(movie)
+    api
+      .addMovie(movie)
+      .then((newMovie) => {
+        console.log(newMovie)
+        setAddMovies([newMovie, ...addMovies]);
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+  }
 
   // function handleToogleClick() {
   //   if (savedMovie) {
@@ -39,7 +56,7 @@ function MoviesCard({ movie }) {
         <p className='movie__duration'>{getTimeFromMins(movie.duration)}</p>
         {location.pathname === "/movies" ? (
           <button
-            className='movie__like'
+            // className={likeButtonClassName}
             type='submit'
             // aria-label={
             //   savedMovie
