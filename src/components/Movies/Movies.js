@@ -4,11 +4,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../../components/Preloader/Preloader';
 
-import * as moviesApi from '../../utils/MoviesApi';
-
-function Movies({ handleSaveMovie, userMovies, handleDeleteMovie }) {
-  const [movies, setMovies] = useState([]);
-  const [initialMovies, setInitialMovies] = useState([]);
+function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDeleteMovie }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [checked, setChecked] = useState(false);
   const [shortMovies, setShortMovies] = useState([]);
@@ -16,35 +12,24 @@ function Movies({ handleSaveMovie, userMovies, handleDeleteMovie }) {
   const [limitMovies, setLimitMovies] = useState(null);
   const [rowMovies, setRowMovies] = useState(null);
   const [shownMovies, setShownMovies] = useState([]);
+  const [shownMoreMovies, setShownMoreMovies] = useState([]);
   const [screenWidth, setScreenWidth] = useState(window.screen.width);
 
   useEffect(() => {
-    moviesApi
-      .getMovies()
-      .then((data) => {
-        setMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : data);
-        setInitialMovies(data);
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
-  }, []);
-
-  // useEffect(() => {
-  //   setMovies(JSON.parse(localStorage.getItem('resultsSearch')));
-  //   setChecked(JSON.parse(localStorage.getItem('isShort')));
-  // }, [])
+    setChecked(JSON.parse(localStorage.getItem('isShort')));
+    setShownMovies(movies)
+  }, [movies]);
 
   const handleSearch = (searchValue) => {
     const filteredMovies = initialMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
-    setMovies(filteredMovies)
+    setShownMovies(filteredMovies)
     localStorage.setItem('searchValue', JSON.stringify(searchValue))
     localStorage.setItem('resultsSearch', JSON.stringify(filteredMovies))
     setIsLoading(false)
   }
 
   const handleShortMovies = () => {
-    const filteredShortMovies = movies.filter((movie) => movie.duration <= 40);
+    const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= 40);
     setShortMovies(filteredShortMovies)
   }
 
@@ -58,8 +43,8 @@ function Movies({ handleSaveMovie, userMovies, handleDeleteMovie }) {
   }, [screenWidth]);
 
   useEffect(() => {
-    setShownMovies(movies.slice(0, limitMovies));
-  }, [movies, limitMovies]);
+    setShownMoreMovies(shownMovies.slice(0, limitMovies));
+  }, [shownMovies, limitMovies]);
 
   const initScreen = (width) => {
     if (width > 1024) {
@@ -114,16 +99,16 @@ function Movies({ handleSaveMovie, userMovies, handleDeleteMovie }) {
       ) : (
         <MoviesCardList
           handleMoreMovies={handleMoreMovies}
-          // handleSaveMovie={handleSaveMovie}
-          // handleDeleteMovie={handleDeleteMovie}
+          handleSaveMovie={handleSaveMovie}
+          handleDeleteMovie={handleDeleteMovie}
           // movies={movies}
           allMovies={movies}
-          movies={checked ? shortMovies : shownMovies}
+          movies={checked ? shortMovies : shownMoreMovies}
+          userMovies={userMovies}
           // searchResults={searchResults}
           // shortMovies={shortMovies}
           limitMovies={limitMovies}
         // checked={checked}
-        // savedMovies={userMovies}
         />
       )}
     </main>

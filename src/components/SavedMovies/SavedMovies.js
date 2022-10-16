@@ -1,43 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, } from 'react';
 import './SavedMovies.css';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../../components/Preloader/Preloader';
 
-function SavedMovies({ userMovies, handleDeleteMovie }) {
-  const [submitted, setSubmitted] = useState(false);
+function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [checked, setChecked] = useState(false);
   const [shortMovies, setShortMovies] = useState([]);
+  const [shownMovies, setShownMovies] = useState([]);
+  const [checked, setChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setSearchResults(userMovies);
-    setIsLoading(false)
+    setShownMovies(userMovies)
   }, [userMovies]);
 
-  useEffect(() => {
-    if (submitted) {
+  const handleSearch = () => {
+    const filteredMovies = initialUserMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
+    setShownMovies(filteredMovies)
+    setIsLoading(false)
+  }
 
-      const results = userMovies.filter(movie =>
-        movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setSearchResults(results);
-      // setIsLoading(true);
-    }
-    // setTimeout(() => setIsLoading(false), 1000);
-  }, [submitted, searchTerm, userMovies]);
-
-  useEffect(() => {
-    if (checked) {
-      const shortMovies = searchResults.filter(movie =>
-        movie.duration <= 40
-      );
-      setShortMovies(shortMovies);
-    }
-  }, [checked, searchResults, setShortMovies,]);
-
+  const handleShortMovies = () => {
+    const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= 40);
+    console.log(filteredShortMovies)
+    setShortMovies(filteredShortMovies)
+  }
 
   const handleChange = e => {
     setSearchTerm(e.target.value);
@@ -45,10 +33,12 @@ function SavedMovies({ userMovies, handleDeleteMovie }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setSubmitted(true);
+    setIsLoading(true)
+    handleSearch(searchTerm)
   }
 
   function handleToogleCheck() {
+    handleShortMovies()
     setChecked(!checked);
   }
 
@@ -63,8 +53,8 @@ function SavedMovies({ userMovies, handleDeleteMovie }) {
       {isLoading ? (
         <Preloader />) : (
         <MoviesCardList
-          movies={checked ? shortMovies : searchResults}
-          savedMovies={userMovies}
+          movies={userMovies}
+          savedMovies={checked ? shortMovies : shownMovies}
           handleDeleteMovie={handleDeleteMovie}
         />
       )}

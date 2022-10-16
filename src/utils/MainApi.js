@@ -45,6 +45,22 @@ export const authorize = (email, password) => {
     })
 };
 
+export const checkToken = (token) => {
+  return fetch(`${MAIN_URL}/users/me`, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  }).then(handleResponse);
+};
+
+export const getUserData = () => {
+  return fetch(`${MAIN_URL}/users/me`, {
+    headers: getHeaders(),
+  }).then(handleResponse);
+};
+
 export const addMovie = (data) => {
   return fetch(`${MAIN_URL}/movies`, {
     method: 'POST',

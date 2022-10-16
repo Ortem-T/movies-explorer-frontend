@@ -1,43 +1,31 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './MoviesCard.css';
 
 import { API_URL, getTimeFromMins } from '../../utils/const';
-import * as api from '../../utils/MainApi';
 
-function MoviesCard({ movie, allMovies, handleDeleteMovie }) {
-  const [addMovies, setAddMovies] = useState([]);
+
+function MoviesCard({ movie, userMovies, handleDeleteMovie, handleSaveMovie }) {
   const location = useLocation();
   const imgUrl = location.pathname === "/movies" ? `${API_URL}${movie.image.url}` : `${movie.image}`;
-  const savedMovie = allMovies.find((i) => i.movieId === movie.id);
-  console.log(allMovies)
-  console.log(savedMovie)
-  // const likeButtonClassName = `movie__like ${savedMovie && 'movie__like_active'}`;
+  const isLiked = (userMovies && userMovies.length > 0)
+    && userMovies.some((i) => i.movieId === movie.id);
+  const likeButtonClassName = `movie__like ${isLiked && 'movie__like_active'}`;
+  const userMovie = (userMovies && userMovies.length > 0)
+    && userMovies.find((i) => i.movieId === movie.id);
 
-  function handleSaveMovie(movie) {
-    console.log(movie)
-    api
-      .addMovie(movie)
-      .then((newMovie) => {
-        console.log(newMovie)
-        setAddMovies([newMovie, ...addMovies]);
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
+  function handleToogleClick() {
+    if (isLiked) {
+      handleDeleteMovie(userMovie);
+    } else {
+      handleSaveMovie(movie);
+    }
   }
 
-  // function handleToogleClick() {
-  //   if (savedMovie) {
-  //     handleDeleteMovie(savedMovie);
-  //   } else {
-  //     handleSaveMovie(movie);
-  //   }
-  // }
+  function handleDeleteClick() {
+    handleDeleteMovie(movie);
+  }
 
-  // function handleDeleteClick() {
-  //   handleDeleteMovie(movie);
-  // }
   return (
     <li className='movie'>
       <div className='movie__item'>
@@ -56,21 +44,21 @@ function MoviesCard({ movie, allMovies, handleDeleteMovie }) {
         <p className='movie__duration'>{getTimeFromMins(movie.duration)}</p>
         {location.pathname === "/movies" ? (
           <button
-            // className={likeButtonClassName}
+            className={likeButtonClassName}
             type='submit'
-            // aria-label={
-            //   savedMovie
-            //     ? 'Удалить фильм из сохранённых фильмов'
-            //     : 'Добавить фильм в сохранённые фильмы'
-            // }
-            // onClick={handleToogleClick}
+            aria-label={
+              isLiked
+                ? 'Удалить фильм из сохранённых фильмов'
+                : 'Добавить фильм в сохранённые фильмы'
+            }
+            onClick={handleToogleClick}
           />
         ) : (
           <button
             className='movie__delete'
             type='submit'
             aria-label='Удалить фильм из сохранённых фильмов'
-            // onClick={handleDeleteClick}
+            onClick={handleDeleteClick}
           />
         )}
       </div>
