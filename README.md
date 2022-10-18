@@ -2,3 +2,4 @@
 https://disk.yandex.ru/d/IfKm7IIuDX3-NA
 
 ## Ссылка на пул реквест
+https://github.com/Ortem-T/movies-explorer-frontend/pull/3
