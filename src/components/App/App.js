@@ -130,7 +130,7 @@ function App() {
     api
       .register(name, email, password)
       .then(() => {
-        navigate('/signin');
+        handleLogin(email, password);
       })
       .catch((err) => {
         setMessage(`Ошибка регистрации. ${err}`);
