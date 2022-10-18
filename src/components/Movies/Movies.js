@@ -70,7 +70,7 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true)
-    handleSearch(searchTerm)
+    handleSearch(searchTerm || '')
   }
 
   function handleToogleCheck() {
@@ -91,9 +91,6 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
         checked={checked}
         handleToogleCheck={handleToogleCheck}
       />
-      {/* {isLoading && (
-        <p className="movies__noresults">Ничего не найдено</p>
-      )} */}
       {isLoading ? (
         <Preloader />
       ) : (
@@ -101,14 +98,10 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
           handleMoreMovies={handleMoreMovies}
           handleSaveMovie={handleSaveMovie}
           handleDeleteMovie={handleDeleteMovie}
-          // movies={movies}
           allMovies={movies}
           movies={checked ? shortMovies : shownMoreMovies}
           userMovies={userMovies}
-          // searchResults={searchResults}
-          // shortMovies={shortMovies}
           limitMovies={limitMovies}
-        // checked={checked}
         />
       )}
     </main>

@@ -1,12 +1,23 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 import Navigation from '../Navigation/Navigation';
 import BurgerNav from '../BurgerNav/BurgerNav'
 import burgerMenu from '../../images/burger.svg';
+import burgerMenuMain from '../../images/burger_main.svg'
 
 function Header({ loggedIn }) {
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  function handleMenuOpen() {
+    setIsMenuOpen(true);
+  }
+
+  function handleMenuClose() {
+    setIsMenuOpen(false);
+  }
+
   return !loggedIn ? (
     <header className='header'>
       <div className='header__container'>
@@ -30,12 +41,15 @@ function Header({ loggedIn }) {
 
         <img
           className='header__burger-menu'
-          src={burgerMenu}
+          src={location.pathname === "/" ? burgerMenuMain : burgerMenu}
           alt='Открыть меню'
+          onClick={handleMenuOpen}
         />
       </div>
 
-      <BurgerNav />
+      {isMenuOpen && <BurgerNav
+        handleMenuClose={handleMenuClose}
+      />}
 
     </header>
   );

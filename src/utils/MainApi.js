@@ -61,6 +61,17 @@ export const getUserData = () => {
   }).then(handleResponse);
 };
 
+export const editUserData = ( name, email ) => {
+  return fetch(`${MAIN_URL}/users/me`, {
+    method: 'PATCH',
+    headers: getHeaders(),
+    body: JSON.stringify({
+      name,
+      email,
+    }),
+  }).then(handleResponse);
+};
+
 export const addMovie = (data) => {
   return fetch(`${MAIN_URL}/movies`, {
     method: 'POST',

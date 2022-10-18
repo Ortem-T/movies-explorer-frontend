@@ -110,6 +110,20 @@
   cursor: pointer;
 }
 
+.register__button-disabled {
+  background-color: #a0a0a0;
+  border: none;
+  border-radius: 3px;
+  margin: 69px 0 0;
+  padding: 14px 0;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #fff;
+}
+
 .register__caption {
   font-style: normal;
   font-weight: 400;

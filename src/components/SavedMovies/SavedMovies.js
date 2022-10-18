@@ -23,7 +23,6 @@ function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie }) {
 
   const handleShortMovies = () => {
     const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= 40);
-    console.log(filteredShortMovies)
     setShortMovies(filteredShortMovies)
   }
 

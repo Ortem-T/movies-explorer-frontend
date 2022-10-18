@@ -18,7 +18,7 @@ function MoviesCardList({
   return (
     <section className='movies__cards' aria-label='Фильмы'>
       {location.pathname === "/movies" && <ul className='movies__list'>
-        {(movies && movies.length >= 0) ? movies.map(movie => (
+        {(movies && movies.length > 0) ? movies.map(movie => (
           <MoviesCard
             key={movie.id}
             movie={movie}

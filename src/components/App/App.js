@@ -15,6 +15,8 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register'
 import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 import * as moviesApi from '../../utils/MoviesApi';
@@ -31,6 +33,9 @@ function App() {
   const [initialMovies, setInitialMovies] = useState([]);
   const [userMovies, setUserMovies] = useState([]);
   const [initialUserMovies, setInitialUserMovies] = useState([]);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -43,13 +48,15 @@ function App() {
         .then(({ name, email }) => {
           setCurrentUser({ name, email });
           setLoggedIn(true);
+          setLoading(false)
         })
         .catch((err) => {
-          console.log(`Ошибка: ${err}`);
+          setMessage(`Ошибка: ${err}`);
+          setIsInfoTooltipOpen(true)
+          setLoading(false)
         });
     }
   }, []);
-
 
   useEffect(() => {
     if (loggedIn) {
@@ -58,13 +65,14 @@ function App() {
           setCurrentUser(userData);
         })
         .catch((err) => {
-          console.log(`Ошибка: ${err}`);
+          setMessage(`Ошибка: ${err}`);
+          setIsInfoTooltipOpen(true)
         });
     }
   }, [loggedIn]);
 
   useEffect(() => {
-    if (currentUser) {
+    if (loggedIn) {
       api
         .getSavedMovies()
         .then((movies) => {
@@ -73,10 +81,11 @@ function App() {
           setInitialUserMovies(myMovies)
         })
         .catch((err) => {
-          console.log(`Ошибка: ${err}`);
+          setMessage(`Ошибка: ${err}`);
+          setIsInfoTooltipOpen(true);
         });
     }
-  }, [currentUser]);
+  }, [loggedIn, currentUser]);
 
   useEffect(() => {
     moviesApi
@@ -86,20 +95,20 @@ function App() {
         setInitialMovies(data);
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
+        setMessage(`Ошибка: ${err}`);
+        setIsInfoTooltipOpen(true);
       });
   }, []);
 
   function handleSaveMovie(movie) {
-    console.log(movie)
     api
       .addMovie(movie)
       .then((newMovie) => {
-        console.log(newMovie)
         setUserMovies([newMovie.data, ...userMovies]);
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
+        setMessage(`Ошибка: ${err}`);
+        setIsInfoTooltipOpen(true);
       });
   }
 
@@ -112,7 +121,8 @@ function App() {
         setUserMovies(newUserMovies);
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
+        setMessage(`Ошибка: ${err}`);
+        setIsInfoTooltipOpen(true);
       });
   }
 
@@ -120,11 +130,11 @@ function App() {
     api
       .register(name, email, password)
       .then(() => {
-        // handleLogin({ email, password });
         navigate('/signin');
       })
       .catch((err) => {
-        console.log(`Ошибка регистрации. ${err}`);
+        setMessage(`Ошибка регистрации. ${err}`);
+        setIsInfoTooltipOpen(true);
       });
   }
 
@@ -137,15 +147,38 @@ function App() {
         }
       })
       .catch((err) => {
-        console.log(`Невозможно войти. ${err}`);
+        setMessage(`Невозможно войти. ${err}`);
+        setIsInfoTooltipOpen(true);
       })
+  }
+
+  function handleUpdateUser(name, email) {
+    api
+      .editUserData(name, email)
+      .then((newData) => {
+        setCurrentUser(newData);
+      })
+      .catch((err) => {
+        setMessage(`Невозможно обновить данные. ${err}`);
+        setIsInfoTooltipOpen(true);
+      });
+  }
+
+  function handleSignOut() {
+    setLoggedIn(false);
+    localStorage.clear();
+    navigate('/');
+  }
+
+  function onCloseTooltip() {
+    setIsInfoTooltipOpen(false)
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
         {pathWithHeader.includes(location.pathname) ?
-          (<Header 
+          (<Header
             loggedIn={loggedIn}
           />) :
           null}
@@ -157,26 +190,40 @@ function App() {
             )} />
 
           <Route path="/movies"
-            element={(<Movies
-              movies={movies}
-              userMovies={userMovies}
-              initialMovies={initialMovies}
-              handleSaveMovie={handleSaveMovie}
-              handleDeleteMovie={handleDeleteMovie}
-            />)}
+            element={(
+              <ProtectedRoute loggedIn={loggedIn} loading={loading}>
+                <Movies
+                  movies={movies}
+                  userMovies={userMovies}
+                  initialMovies={initialMovies}
+                  handleSaveMovie={handleSaveMovie}
+                  handleDeleteMovie={handleDeleteMovie}
+                />
+              </ProtectedRoute>
+            )}
           />
 
           <Route path="/saved-movies"
-            element={(<SavedMovies
-              userMovies={userMovies}
-              initialUserMovies={initialUserMovies}
-              handleDeleteMovie={handleDeleteMovie}
-            />)}
+            element={(
+              <ProtectedRoute loggedIn={loggedIn} loading={loading}>
+                <SavedMovies
+                  userMovies={userMovies}
+                  initialUserMovies={initialUserMovies}
+                  handleDeleteMovie={handleDeleteMovie}
+                />
+              </ProtectedRoute>
+            )}
           />
 
           <Route path="/profile"
-            element={(<Profile
-            />)}
+            element={(
+              <ProtectedRoute loggedIn={loggedIn} loading={loading}>
+                <Profile
+                  handleUpdateUser={handleUpdateUser}
+                  handleSignOut={handleSignOut}
+                />
+              </ProtectedRoute>
+            )}
           />
 
           <Route path="/signin"
@@ -198,6 +245,7 @@ function App() {
         </Routes>
 
         {pathWithFooter.includes(location.pathname) ? (<Footer />) : null}
+        <InfoTooltip message={message} isOpen={isInfoTooltipOpen} onCloseTooltip={onCloseTooltip} />
       </>
     </CurrentUserContext.Provider>
   );

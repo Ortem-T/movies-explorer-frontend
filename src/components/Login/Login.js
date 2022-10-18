@@ -1,55 +1,59 @@
-import { useState } from 'react';
+import { useForm } from "react-hook-form";
 import { Link } from 'react-router-dom';
 import './Login.css';
+import isEmail from 'validator/lib/isEmail';
 
 function Login({ onLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, formState: { errors, isValid } } = useForm({ mode: "onChange", });
 
-  function handleEmailChange(evt) {
-    setEmail(evt.target.value);
-  }
-
-  function handlePasswordChange(evt) {
-    setPassword(evt.target.value);
-  }
-
-  function handleSubmit(evt) {
-    evt.preventDefault();
+  function onSubmit({ email, password }) {
     onLogin(email, password);
   }
 
   return (
-    <form className='login' onSubmit={handleSubmit} noValidate>
+    <form className='login' onSubmit={handleSubmit(onSubmit)} noValidate>
       <Link to='/' className='login__logo' />
       <h2 className='login__title'>Рады видеть!</h2>
       <label className='login__label'>E-mail</label>
       <input
-        onChange={handleEmailChange}
+        {...register('email', {
+          required: true,
+          validate: (input) => isEmail(input)
+        })
+        }
         className='login__input'
         placeholder='Введите e-mail'
-        name='email'
         type='email'
         id='email'
-        required
       />
-      <span className='login__input-error'></span>
+      {
+        errors.email?.type === 'required' ? <span className='login__input-error'>Поле обязательно для заполнения</span> :
+          errors.email?.type === 'validate' ? <span className='login__input-error'>Некорректный E-mail</span> :
+            <span className='login__input-error'></span>
+      }
       <label className='login__label'>Пароль</label>
       <input
-        onChange={handlePasswordChange}
+        {...register('password', {
+          required: true,
+          minLength: 5,
+          maxLength: 30,
+        })
+        }
         className='login__input'
         placeholder='Введите пароль'
-        name='password'
         type='password'
         id='password'
-        minLength='8'
-        maxLength='30'
-        required
       />
-      <span className='login__input-error'></span>
+      {
+        errors.password?.type === 'required' ? <span className='login__input-error'>Поле обязательно для заполнения</span> :
+          errors.password?.type === 'minLength' ? <span className='login__input-error'>Пароль должен быть больше 5 символов</span> :
+            errors.password?.type === 'maxLength' ? <span className='login__input-error'>Пароль должен быть менее 30 символов</span> :
+              <span className='login__input-error'></span>
+      }
       <button
-        className='login__button'
+        className={!isValid ? 'login__button-disabled' : 'login__button'}
         type='submit'
+        disabled={!isValid}
       >
         Войти
       </button>
