@@ -26,7 +26,6 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   const [shownMovies, setShownMovies] = useState([]);
   const [shownMoreMovies, setShownMoreMovies] = useState([]);
   const [screenWidth, setScreenWidth] = useState(window.screen.width);
-  localStorage.setItem('isShort', JSON.stringify(checked))
 
   useEffect(() => {
     setChecked(JSON.parse(localStorage.getItem('isShort')));

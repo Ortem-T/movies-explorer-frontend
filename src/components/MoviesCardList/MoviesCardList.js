@@ -8,7 +8,7 @@ function MoviesCardList({
   savedMovies,
   userMovies,
   limitMovies,
-  allMovies, 
+  allMovies,
   checked,
   handleMoreMovies,
   handleSaveMovie,
@@ -27,10 +27,7 @@ function MoviesCardList({
             handleSaveMovie={handleSaveMovie}
             handleDeleteMovie={handleDeleteMovie}
           />
-        )) 
-        // : (
-        //   <p className='movies__not-found'>Ничего не найдено</p>
-        // )
+        ))
         }
       </ul>}
       {location.pathname === "/saved-movies" && <ul className='movies__list'>
@@ -42,9 +39,6 @@ function MoviesCardList({
             handleDeleteMovie={handleDeleteMovie}
           />
         ))
-        //  : (
-        //   <p className='movies__not-found'>Ничего не найдено</p>
-        // )
         }
       </ul>}
       {location.pathname === "/movies" && allMovies.length > limitMovies && !checked && allMovies.length !== movies.length && <button
