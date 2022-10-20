@@ -8,7 +8,8 @@ function MoviesCardList({
   savedMovies,
   userMovies,
   limitMovies,
-  allMovies, checked,
+  allMovies, 
+  checked,
   handleMoreMovies,
   handleSaveMovie,
   handleDeleteMovie
@@ -42,7 +43,7 @@ function MoviesCardList({
           <p className='movies__not-found'>Ничего не найдено</p>
         )}
       </ul>}
-      {location.pathname === "/movies" && allMovies.length > limitMovies && !checked && <button
+      {location.pathname === "/movies" && allMovies.length > limitMovies && !checked && allMovies.length !== movies.length && <button
         className='movies__button'
         type='button'
         aria-label='Ещё фильмы'

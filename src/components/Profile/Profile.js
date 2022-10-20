@@ -10,7 +10,7 @@ function Profile({ handleUpdateUser, handleSignOut }) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid }
+    formState: { errors, isValid, isDirty }
   } = useForm({
     mode: "onChange", defaultValues: { name: currentUser.name || '', email: currentUser.email || '' }
   });
@@ -18,6 +18,7 @@ function Profile({ handleUpdateUser, handleSignOut }) {
   function onSubmit({ name, email }) {
     handleUpdateUser(name, email);
   }
+
   return (
     <form className='profile' onSubmit={handleSubmit(onSubmit)} noValidate>
       <h2 className='profile__title'>Привет, {currentUser.name}!</h2>
@@ -67,9 +68,9 @@ function Profile({ handleUpdateUser, handleSignOut }) {
         </div>
       </fieldset>
       <button
-        className={!isValid ? 'profile__edit-button-disabled' : 'profile__edit-button'}
+        className={(!isValid || !isDirty) ? 'profile__edit-button-disabled' : 'profile__edit-button'}
         type='submit'
-        disabled={!isValid}
+        disabled={!isValid || !isDirty}
       >
         Редактировать
       </button>

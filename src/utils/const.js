@@ -14,3 +14,14 @@ export const getTimeFromMins = (mins) => {
   let minutes = mins % 60;
   return hours + 'ч ' + minutes + 'м';
 };
+
+export const SHORT_MOVIE_DURATION = 40;
+export const FULL_SCREEN = 1024;
+export const MEDIUM_SCREEN = 768;
+
+export const SIXTEEN_MOVIES = 16;
+export const EIGHT_MOVIES = 8;
+export const FIVE_MOVIES = 5;
+export const FOUR_MOVIES = 4;
+export const TWO_MOVIES = 2;
+export const ONE_MOVIE = 1;

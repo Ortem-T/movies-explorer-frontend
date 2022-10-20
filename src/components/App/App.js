@@ -4,6 +4,7 @@ import {
   Route,
   useLocation,
   useNavigate,
+  Navigate
 } from "react-router-dom";
 import './App.css';
 import Header from '../Header/Header';
@@ -54,7 +55,11 @@ function App() {
           setMessage(`Ошибка: ${err}`);
           setIsInfoTooltipOpen(true)
           setLoading(false)
+
         });
+    } else {
+      setLoggedIn(false);
+      localStorage.clear();
     }
   }, []);
 
@@ -91,12 +96,14 @@ function App() {
     moviesApi
       .getMovies()
       .then((data) => {
-        setMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : data);
+        setMovies(data);
         setInitialMovies(data);
+        setLoading(false)
       })
       .catch((err) => {
         setMessage(`Ошибка: ${err}`);
         setIsInfoTooltipOpen(true);
+        setLoading(false)
       });
   }, []);
 
@@ -143,12 +150,14 @@ function App() {
       .then((res) => {
         if (res) {
           setLoggedIn(true)
+          setLoading(false)
           navigate('/movies');
         }
       })
       .catch((err) => {
         setMessage(`Невозможно войти. ${err}`);
         setIsInfoTooltipOpen(true);
+        setLoading(false)
       })
   }
 
@@ -157,6 +166,8 @@ function App() {
       .editUserData(name, email)
       .then((newData) => {
         setCurrentUser(newData);
+        setMessage(`Данные успешно обновлены`);
+        setIsInfoTooltipOpen(true);
       })
       .catch((err) => {
         setMessage(`Невозможно обновить данные. ${err}`);
@@ -168,6 +179,8 @@ function App() {
     setLoggedIn(false);
     localStorage.clear();
     navigate('/');
+    setUserMovies([]);
+    setMovies([]);
   }
 
   function onCloseTooltip() {
@@ -227,13 +240,13 @@ function App() {
           />
 
           <Route path="/signin"
-            element={(<Login
+            element={loggedIn ? <Navigate to="/" /> : (<Login
               onLogin={handleLogin}
             />)}
           />
 
           <Route path="/signup"
-            element={(<Register
+            element={loggedIn ? <Navigate to="/" /> : (<Register
               onRegister={handleRegister}
             />)}
           />

@@ -4,6 +4,18 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../../components/Preloader/Preloader';
 
+import {
+  SHORT_MOVIE_DURATION,
+  FULL_SCREEN,
+  MEDIUM_SCREEN,
+  SIXTEEN_MOVIES,
+  EIGHT_MOVIES,
+  FIVE_MOVIES,
+  FOUR_MOVIES,
+  TWO_MOVIES,
+  ONE_MOVIE,
+} from '../../utils/const';
+
 function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDeleteMovie }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [checked, setChecked] = useState(false);
@@ -17,20 +29,22 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
 
   useEffect(() => {
     setChecked(JSON.parse(localStorage.getItem('isShort')));
-    setShownMovies(movies)
+    setShownMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : movies)
+    setSearchTerm(JSON.parse(localStorage.getItem('searchValue')))
   }, [movies]);
+
+  useEffect(() => {
+    const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= SHORT_MOVIE_DURATION);
+    setShortMovies(filteredShortMovies)
+  }, [shownMovies]);
 
   const handleSearch = (searchValue) => {
     const filteredMovies = initialMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
     setShownMovies(filteredMovies)
     localStorage.setItem('searchValue', JSON.stringify(searchValue))
     localStorage.setItem('resultsSearch', JSON.stringify(filteredMovies))
+    localStorage.setItem('isShort', JSON.stringify(checked))
     setIsLoading(false)
-  }
-
-  const handleShortMovies = () => {
-    const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= 40);
-    setShortMovies(filteredShortMovies)
   }
 
   useEffect(() => {
@@ -47,15 +61,15 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   }, [shownMovies, limitMovies]);
 
   const initScreen = (width) => {
-    if (width > 1024) {
-      setLimitMovies(16);
-      setRowMovies(4)
-    } else if (width < 1024 && width >= 768) {
-      setLimitMovies(8);
-      setRowMovies(2)
-    } else if (width < 768) {
-      setLimitMovies(5);
-      setRowMovies(1)
+    if (width > FULL_SCREEN) {
+      setLimitMovies(SIXTEEN_MOVIES);
+      setRowMovies(FOUR_MOVIES)
+    } else if (width < FULL_SCREEN && width >= MEDIUM_SCREEN) {
+      setLimitMovies(EIGHT_MOVIES);
+      setRowMovies(TWO_MOVIES)
+    } else if (width < MEDIUM_SCREEN) {
+      setLimitMovies(FIVE_MOVIES);
+      setRowMovies(ONE_MOVIE)
     }
   };
 
@@ -74,7 +88,6 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   }
 
   function handleToogleCheck() {
-    handleShortMovies()
     setChecked(!checked);
     localStorage.setItem('isShort', JSON.stringify(!checked))
   }
@@ -98,7 +111,7 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
           handleMoreMovies={handleMoreMovies}
           handleSaveMovie={handleSaveMovie}
           handleDeleteMovie={handleDeleteMovie}
-          allMovies={movies}
+          allMovies={shownMovies}
           movies={checked ? shortMovies : shownMoreMovies}
           userMovies={userMovies}
           limitMovies={limitMovies}
