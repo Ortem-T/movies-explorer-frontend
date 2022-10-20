@@ -19,7 +19,7 @@ function MoviesCardList({
   return (
     <section className='movies__cards' aria-label='Фильмы'>
       {location.pathname === "/movies" && <ul className='movies__list'>
-        {(movies && movies.length > 0) ? movies.map(movie => (
+        {(movies && movies.length > 0) && movies.map(movie => (
           <MoviesCard
             key={movie.id}
             movie={movie}
@@ -27,21 +27,25 @@ function MoviesCardList({
             handleSaveMovie={handleSaveMovie}
             handleDeleteMovie={handleDeleteMovie}
           />
-        )) : (
-          <p className='movies__not-found'>Ничего не найдено</p>
-        )}
+        )) 
+        // : (
+        //   <p className='movies__not-found'>Ничего не найдено</p>
+        // )
+        }
       </ul>}
       {location.pathname === "/saved-movies" && <ul className='movies__list'>
-        {(savedMovies && savedMovies.length > 0) ? savedMovies.map(movie => (
+        {(savedMovies && savedMovies.length > 0) && savedMovies.map(movie => (
           <MoviesCard
             key={movie._id}
             movie={movie}
             savedMovies={savedMovies}
             handleDeleteMovie={handleDeleteMovie}
           />
-        )) : (
-          <p className='movies__not-found'>Ничего не найдено</p>
-        )}
+        ))
+        //  : (
+        //   <p className='movies__not-found'>Ничего не найдено</p>
+        // )
+        }
       </ul>}
       {location.pathname === "/movies" && allMovies.length > limitMovies && !checked && allMovies.length !== movies.length && <button
         className='movies__button'

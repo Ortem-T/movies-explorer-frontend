@@ -46,8 +46,8 @@ function App() {
     if (token) {
       api
         .checkToken(token)
-        .then(({ name, email }) => {
-          setCurrentUser({ name, email });
+        .then((userData) => {
+          setCurrentUser(userData);
           setLoggedIn(true);
           setLoading(false)
         })
@@ -187,6 +187,11 @@ function App() {
     setIsInfoTooltipOpen(false)
   }
 
+  function handleResultsSearch() {
+    setMessage(`Ничего не найдено`);
+    setIsInfoTooltipOpen(true);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
@@ -211,6 +216,7 @@ function App() {
                   initialMovies={initialMovies}
                   handleSaveMovie={handleSaveMovie}
                   handleDeleteMovie={handleDeleteMovie}
+                  handleResultsSearch={handleResultsSearch}
                 />
               </ProtectedRoute>
             )}
@@ -223,6 +229,7 @@ function App() {
                   userMovies={userMovies}
                   initialUserMovies={initialUserMovies}
                   handleDeleteMovie={handleDeleteMovie}
+                  handleResultsSearch={handleResultsSearch}
                 />
               </ProtectedRoute>
             )}

@@ -4,7 +4,7 @@ import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../../components/Preloader/Preloader';
 
-function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie }) {
+function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie, handleResultsSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [shortMovies, setShortMovies] = useState([]);
   const [shownMovies, setShownMovies] = useState([]);
@@ -19,6 +19,7 @@ function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie }) {
     const filteredMovies = initialUserMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
     setShownMovies(filteredMovies)
     setIsLoading(false)
+    filteredMovies.length < 1 && handleResultsSearch()
   }
 
   const handleShortMovies = () => {
@@ -48,6 +49,7 @@ function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie }) {
         handleChange={handleChange}
         checked={checked}
         handleToogleCheck={handleToogleCheck}
+        searchTerm={searchTerm}
       />
       {isLoading ? (
         <Preloader />) : (

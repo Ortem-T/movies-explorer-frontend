@@ -16,7 +16,7 @@ import {
   ONE_MOVIE,
 } from '../../utils/const';
 
-function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDeleteMovie }) {
+function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDeleteMovie, handleResultsSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [checked, setChecked] = useState(false);
   const [shortMovies, setShortMovies] = useState([]);
@@ -26,25 +26,28 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   const [shownMovies, setShownMovies] = useState([]);
   const [shownMoreMovies, setShownMoreMovies] = useState([]);
   const [screenWidth, setScreenWidth] = useState(window.screen.width);
+  localStorage.setItem('isShort', JSON.stringify(checked))
 
   useEffect(() => {
     setChecked(JSON.parse(localStorage.getItem('isShort')));
-    setShownMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : movies)
+    setShownMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : initialMovies)
     setSearchTerm(JSON.parse(localStorage.getItem('searchValue')))
-  }, [movies]);
+  }, [initialMovies]);
 
   useEffect(() => {
     const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= SHORT_MOVIE_DURATION);
     setShortMovies(filteredShortMovies)
   }, [shownMovies]);
 
-  const handleSearch = (searchValue) => {
+  const handleSearch = (searchValue, isShort) => {
     const filteredMovies = initialMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
     setShownMovies(filteredMovies)
+    console.log(isShort)
     localStorage.setItem('searchValue', JSON.stringify(searchValue))
     localStorage.setItem('resultsSearch', JSON.stringify(filteredMovies))
-    localStorage.setItem('isShort', JSON.stringify(checked))
+    localStorage.setItem('isShort', JSON.stringify(isShort))
     setIsLoading(false)
+    filteredMovies.length < 1 && handleResultsSearch()
   }
 
   useEffect(() => {
@@ -84,12 +87,12 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true)
-    handleSearch(searchTerm || '')
+    handleSearch(searchTerm, checked)
   }
 
   function handleToogleCheck() {
     setChecked(!checked);
-    localStorage.setItem('isShort', JSON.stringify(!checked))
+    localStorage.setItem('isShort', JSON.stringify(!checked));
   }
 
   function handleMoreMovies() {
@@ -103,6 +106,7 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
         handleChange={handleChange}
         checked={checked}
         handleToogleCheck={handleToogleCheck}
+        searchTerm={searchTerm}
       />
       {isLoading ? (
         <Preloader />
