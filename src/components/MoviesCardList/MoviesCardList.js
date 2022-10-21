@@ -41,7 +41,7 @@ function MoviesCardList({
         ))
         }
       </ul>}
-      {location.pathname === "/movies" && allMovies.length > limitMovies && !checked && allMovies.length !== movies.length && <button
+      {location.pathname === "/movies" && !checked && allMovies.length > limitMovies && allMovies.length !== movies.length && <button
         className='movies__button'
         type='button'
         aria-label='Ещё фильмы'

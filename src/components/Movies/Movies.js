@@ -28,9 +28,12 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   const [screenWidth, setScreenWidth] = useState(window.screen.width);
 
   useEffect(() => {
-    setChecked(JSON.parse(localStorage.getItem('isShort')));
-    setShownMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : initialMovies)
+    setChecked(JSON.parse(localStorage.getItem('isShort')) || false);
     setSearchTerm(JSON.parse(localStorage.getItem('searchValue')))
+  }, []);
+
+  useEffect(() => {
+    setShownMovies(localStorage.resultsSearch ? JSON.parse(localStorage.getItem('resultsSearch')) : initialMovies)
   }, [initialMovies]);
 
   useEffect(() => {
@@ -117,6 +120,7 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
           movies={checked ? shortMovies : shownMoreMovies}
           userMovies={userMovies}
           limitMovies={limitMovies}
+          checked={checked}
         />
       )}
     </main>

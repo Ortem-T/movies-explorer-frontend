@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from 'react-router-dom';
 import './Profile.css';
@@ -7,9 +7,11 @@ import isEmail from 'validator/lib/isEmail';
 
 function Profile({ handleUpdateUser, handleSignOut }) {
   const currentUser = useContext(CurrentUserContext);
+  
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid, isDirty }
   } = useForm({
     mode: "onChange", defaultValues: { name: currentUser.name || '', email: currentUser.email || '' }
@@ -18,6 +20,13 @@ function Profile({ handleUpdateUser, handleSignOut }) {
   function onSubmit({ name, email }) {
     handleUpdateUser(name, email);
   }
+
+  useEffect(() => {
+    reset({
+      name: currentUser.name,
+      email: currentUser.email
+    })
+  }, [currentUser.name, currentUser.email, reset])
 
   return (
     <form className='profile' onSubmit={handleSubmit(onSubmit)} noValidate>
