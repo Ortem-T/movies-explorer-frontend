@@ -15,16 +15,16 @@ function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie, handleR
     setShownMovies(userMovies)
   }, [userMovies]);
 
+  useEffect(() => {
+    const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= 40);
+    setShortMovies(filteredShortMovies)
+  }, [shownMovies]);
+
   const handleSearch = () => {
     const filteredMovies = initialUserMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
     setShownMovies(filteredMovies)
     setIsLoading(false)
     filteredMovies.length < 1 && handleResultsSearch()
-  }
-
-  const handleShortMovies = () => {
-    const filteredShortMovies = shownMovies.filter((movie) => movie.duration <= 40);
-    setShortMovies(filteredShortMovies)
   }
 
   const handleChange = e => {
@@ -38,7 +38,6 @@ function SavedMovies({ userMovies, initialUserMovies, handleDeleteMovie, handleR
   }
 
   function handleToogleCheck() {
-    handleShortMovies()
     setChecked(!checked);
   }
 

@@ -41,7 +41,6 @@ function Movies({ movies, userMovies, initialMovies, handleSaveMovie, handleDele
   const handleSearch = (searchValue, isShort) => {
     const filteredMovies = initialMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchTerm.toLowerCase()))
     setShownMovies(filteredMovies)
-    console.log(isShort)
     localStorage.setItem('searchValue', JSON.stringify(searchValue))
     localStorage.setItem('resultsSearch', JSON.stringify(filteredMovies))
     localStorage.setItem('isShort', JSON.stringify(isShort))

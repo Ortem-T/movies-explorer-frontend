@@ -42,7 +42,6 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
-
     if (token) {
       api
         .checkToken(token)
@@ -52,13 +51,13 @@ function App() {
           setLoading(false)
         })
         .catch((err) => {
+          console.log(err)
           setMessage(`Ошибка: ${err}`);
           setIsInfoTooltipOpen(true)
           setLoading(false)
-
+          localStorage.clear();
         });
-    } else {
-      setLoggedIn(false);
+    } else{
       localStorage.clear();
     }
   }, []);
@@ -104,6 +103,7 @@ function App() {
         setMessage(`Ошибка: ${err}`);
         setIsInfoTooltipOpen(true);
         setLoading(false)
+        localStorage.clear();
       });
   }, []);
 
@@ -151,6 +151,7 @@ function App() {
         if (res) {
           setLoggedIn(true)
           setLoading(false)
+          setCurrentUser(res);
           navigate('/movies');
         }
       })
