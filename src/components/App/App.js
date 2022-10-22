@@ -54,11 +54,10 @@ function App() {
           console.log(err)
           setMessage(`Ошибка: ${err}`);
           setIsInfoTooltipOpen(true)
-          setLoading(false)
-          localStorage.clear();
+          handleSignOut()
         });
     } else{
-      localStorage.clear();
+      handleSignOut()
     }
   }, []);
 
