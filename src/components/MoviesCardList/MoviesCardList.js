@@ -3,45 +3,54 @@ import { useLocation } from 'react-router-dom';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
-function MoviesCardList() {
+function MoviesCardList({
+  movies,
+  savedMovies,
+  userMovies,
+  limitMovies,
+  allMovies,
+  checked,
+  handleMoreMovies,
+  handleSaveMovie,
+  handleDeleteMovie
+}) {
   const location = useLocation();
-  return location.pathname === "/movies" ? (
+
+  return (
     <section className='movies__cards' aria-label='Фильмы'>
-      <ul className='movies__list'>
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-      </ul>
-      <button
+      {location.pathname === "/movies" && <ul className='movies__list'>
+        {(movies && movies.length > 0) && movies.map(movie => (
+          <MoviesCard
+            key={movie.id}
+            movie={movie}
+            userMovies={userMovies}
+            handleSaveMovie={handleSaveMovie}
+            handleDeleteMovie={handleDeleteMovie}
+          />
+        ))
+        }
+      </ul>}
+      {location.pathname === "/saved-movies" && <ul className='movies__list'>
+        {(savedMovies && savedMovies.length > 0) && savedMovies.map(movie => (
+          <MoviesCard
+            key={movie._id}
+            movie={movie}
+            savedMovies={savedMovies}
+            handleDeleteMovie={handleDeleteMovie}
+          />
+        ))
+        }
+      </ul>}
+      {location.pathname === "/movies" && !checked && allMovies.length > limitMovies && allMovies.length !== movies.length && <button
         className='movies__button'
         type='button'
         aria-label='Ещё фильмы'
+        onClick={handleMoreMovies}
       >
         Ещё
-      </button>
+      </button>}
     </section>
-  ) : (
-    <section className='movies__cards' aria-label='Фильмы'>
-      <ul className='movies__list'>
-        <MoviesCard />
-        <MoviesCard />
-        <MoviesCard />
-      </ul>
-    </section>
-  );
+  )
 }
 
 export default MoviesCardList;

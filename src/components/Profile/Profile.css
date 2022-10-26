@@ -44,7 +44,6 @@
 .profile__fildset {
   width: 410px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
   border: none;
   margin: 0;
@@ -72,6 +71,11 @@
   margin: 0;
 }
 
+.profile__input-cover {
+  display: flex;
+  flex-direction: column;
+}
+
 .profile__input {
   font-style: normal;
   font-weight: 400;
@@ -86,6 +90,17 @@
 .profile__input:focus {
   outline: none;
   border-bottom: 1px solid #e8e8e8;
+}
+
+.profile__input-error {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ff3055;
+  margin: 5px 0 0;
+  min-height: 12px;
+  align-self: flex-end;
 }
 
 .profile__edit-button {
@@ -119,6 +134,19 @@
 .profile__edit-button:hover {
   opacity: 0.7;
   cursor: pointer;
+}
+
+.profile__edit-button-disabled {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #a0a0a0;
+  margin: 220px 0 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
 }
 
 .profile__logout-link {
